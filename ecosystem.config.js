@@ -1,15 +1,15 @@
 module.exports = {
-  apps : [{
-    name      : 'API',
-    script    : 'index.js',
+  apps: [{
+    name: 'Telegram BOT',
+    script: 'index.js',
     env: {
       NODE_ENV: 'development'
     },
-    env_production : {
+    env_production: {
       NODE_ENV: 'production'
     }
   }],
 
-  deploy : {
+  deploy: {
   }
 }
