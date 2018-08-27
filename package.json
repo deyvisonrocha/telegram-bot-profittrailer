@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "node-binance-api": "^0.8.1",
-    "telegraf": "^3.22.2"
+    "dotenv": "^6.0.0",
+    "logform": "^1.9.1",
+    "telegraf": "^3.22.2",
+    "winston": "^3.0.0"
   }
 }
