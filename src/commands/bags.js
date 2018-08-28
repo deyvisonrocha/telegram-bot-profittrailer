@@ -1,12 +1,10 @@
 const bot = require('../services/telegram')
 const logger = require('../services/logger')
-const axios = require('axios')
-const ptConfig = require('../config/pt')
-const endPoints = require('../config/endpoints')
+const { http } = require('../services/axios')
 
 bot.command('bags', (ctx) => {
   logger.info('Pegando informações DCAs')
-  axios.get(`${endPoints.dca}`, { params: { token: ptConfig.token } })
+  http.get('api/dca/log')
   .then(r => {
     var dados = r.data.map(item => {
       var dado = item

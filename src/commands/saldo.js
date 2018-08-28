@@ -1,24 +1,24 @@
 const bot = require('../services/telegram')
 const logger = require('../services/logger')
-const axios = require('axios')
-const ptConfig = require('../config/pt')
-const endPoints = require('../config/endpoints')
+const { http } = require('../services/axios')
 const { totalBalance, totalBinanceCoin } = require('../functions/utils')
 
 bot.command('saldo', (ctx) => {
   logger.info('Pegando informações gerais')
-  axios.get(`${endPoints.data}`, { params: { token: ptConfig.token } })
-  .then(r => {
-    var balance = totalBalance(r.data)
-    var bnbBalance = totalBinanceCoin(r.data)
+  http.get('api/data')
+  .then(response => {
+    var balance = totalBalance(response.data)
+    var bnbBalance = totalBinanceCoin(response.data)
     var reply = '<b>Saldos:</b>\n'
-    reply += balance.toFixed(8) + ' ' + r.data.market + '\n'
+    reply += balance.toFixed(8) + ' ' + response.data.market + '\n'
     reply += bnbBalance + ' BNB\n\n'
     reply += '<b>Resultados:</b>\n'
-    reply += 'Hoje: ' + r.data.stats.totalProfitPercToday + '% (' + r.data.stats.totalSalesToday + ' trades)\n'
-    reply += 'Ontem: ' + r.data.stats.totalProfitPercYesterday + '% (' + r.data.stats.totalSalesYesterday + ' trades)\n'
-    reply += 'Esta semana: ' + r.data.stats.totalProfitPercWeek + '% (' + r.data.stats.totalSalesWeek + ' trades)\n'
-
+    reply += 'Hoje: ' + response.data.stats.totalProfitPercToday + '% (' + response.data.stats.totalSalesToday + ' trades)\n'
+    reply += 'Ontem: ' + response.data.stats.totalProfitPercYesterday + '% (' + response.data.stats.totalSalesYesterday + ' trades)\n'
+    reply += 'Esta semana: ' + response.data.stats.totalProfitPercWeek + '% (' + response.data.stats.totalSalesWeek + ' trades)\n'
+    return reply
+  })
+  .then(reply => {
     ctx.reply(reply, { parse_mode: 'HTML' })
     logger.info('comando /saldo respondido.')
   })
