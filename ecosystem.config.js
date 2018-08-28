@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'Telegram BOT',
+    name: 'ptrocha-bot',
     script: 'index.js',
     env: {
       NODE_ENV: 'development'
