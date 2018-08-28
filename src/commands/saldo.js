@@ -2,11 +2,12 @@ const bot = require('../services/telegram')
 const logger = require('../services/logger')
 const axios = require('axios')
 const ptConfig = require('../config/pt')
+const endPoints = require('../config/endpoints')
 const { totalBalance, totalBinanceCoin } = require('../functions/utils')
 
 bot.command('saldo', (ctx) => {
-  logger.info('Pegando informações em: http://bit.deyvisonrocha.com/api/data?token=' + ptConfig.token)
-  axios.get('http://bit.deyvisonrocha.com/api/data?token=' + ptConfig.token)
+  logger.info('Pegando informações gerais')
+  axios.get(`${endPoints.data}`, { params: { token: ptConfig.token } })
   .then(r => {
     var balance = totalBalance(r.data)
     var bnbBalance = totalBinanceCoin(r.data)

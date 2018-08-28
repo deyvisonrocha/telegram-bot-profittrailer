@@ -2,24 +2,25 @@ const bot = require('../services/telegram')
 const logger = require('../services/logger')
 const axios = require('axios')
 const ptConfig = require('../config/pt')
+const endPoints = require('../config/endpoints')
 
 bot.command('bags', (ctx) => {
   logger.info('Pegando informações DCAs')
-  axios.get('http://bit.deyvisonrocha.com/api/dca/log?token=' + ptConfig.token)
+  axios.get(`${endPoints.dca}`, { params: { token: ptConfig.token } })
   .then(r => {
     var dados = r.data.map(item => {
-      var dado = {}
+      var dado = item
+      dado.profit = item.profit
       dado.currency = item.currency
-      dado.profit = item.sellStrategies.currentValue
       dado.boughtTimes = item.boughtTimes
-
+      dado.percent = item.sellStrategies[0].currentValue
       return dado
     })
 
     var ordered = dados.slice(0);
     ordered.sort(function(a,b) {
-        return b.profit - a.profit;
-    });
+        return b.profit - a.profit
+    })
 
     var reply = '**PTROCHA** v2\n\n'
 
@@ -32,7 +33,7 @@ bot.command('bags', (ctx) => {
       } else {
         reply += '     '
       }
-      reply += dado.profit.toFixed(2) + '%\n'
+      reply += dado.percent + '%\n'
     })
     // return reply
     reply += '```'
