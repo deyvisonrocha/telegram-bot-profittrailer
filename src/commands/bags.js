@@ -22,9 +22,7 @@ bot.command('bags', (ctx) => {
         return b.profit - a.profit
     })
 
-    var reply = '**PTROCHA** v2\n\n'
-
-    reply += '**Bags:**\n```\n'
+    var reply = '**Bags:**\n```\n'
 
     ordered.map(dado => {
       reply += dado.currency.padEnd(7)
