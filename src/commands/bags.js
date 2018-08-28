@@ -10,7 +10,7 @@ bot.command('bags', (ctx) => {
     var dados = r.data.map(item => {
       var dado = {}
       dado.currency = item.currency
-      dado.profit = item.profit
+      dado.profit = item.sellStrategies.currentValue
       dado.boughtTimes = item.boughtTimes
 
       return dado
