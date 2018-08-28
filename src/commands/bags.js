@@ -33,7 +33,7 @@ bot.command('bags', (ctx) => {
       } else {
         reply += '     '
       }
-      reply += dado.percent + '%\n'
+      reply += dado.percent.toFixed(2) + '%\n'
     })
     // return reply
     reply += '```'
