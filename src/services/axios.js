@@ -9,8 +9,6 @@ const http = axios.create({
   }
 })
 
-// http.get('api/dca/log').then(r => console.log(r))
-
 module.exports = {
   http: http
 }
