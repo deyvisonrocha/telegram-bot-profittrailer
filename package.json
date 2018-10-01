@@ -13,10 +13,13 @@
     "nodemon": "^1.18.3"
   },
   "dependencies": {
+    "await-to-js": "^2.0.1",
     "axios": "^0.18.0",
+    "binance-api-node": "^0.8.5",
     "dotenv": "^6.0.0",
     "logform": "^1.9.1",
     "telegraf": "^3.22.2",
+    "telegraf-command-parts": "^1.0.3",
     "winston": "^3.0.0"
   }
 }

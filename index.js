@@ -5,6 +5,7 @@ const bot = require('./src/services/telegram')
 // Comandos
 require('./src/commands/saldo')
 require('./src/commands/bags')
+require('./src/commands/sell')
 
 bot.telegram.getMe()
   .then((botInfo) => {
