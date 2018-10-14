@@ -20,16 +20,18 @@ bot.command('bags', (ctx) => {
         return b.profit - a.profit
     })
 
-    var reply = '*Bags:*\n```\n'
+    var reply = '*Bags:* \n```\n'
 
+    let count = 1
     ordered.map(dado => {
-      reply += dado.currency.padEnd(7)
+      reply += count + '. ' + dado.currency.padEnd(7)
       if (dado.boughtTimes > 0) {
         reply += ' (' + dado.boughtTimes + ') '
       } else {
         reply += '     '
       }
       reply += dado.percent.toFixed(2) + '%\n'
+      count++
     })
     // return reply
     reply += '```'
