@@ -2,6 +2,10 @@
   "name": "ptrocha-bot",
   "version": "1.0.0",
   "description": "Stats from ProfitTrailer Bot",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/deyvisonrocha/ptrocha-bot"
+  },
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
