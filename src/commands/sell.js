@@ -1,22 +1,31 @@
-const bot = require('../services/telegram')
-const logger = require('../services/logger')
-const { http } = require('../services/axios')
-const {to} = require('await-to-js')
-const Binance = require('binance-api-node').default
-const commandParts = require('telegraf-command-parts');
-
-const binance = Binance({
-  apiKey: process.env.BINANCE_API_KEY,
-  apiSecret: process.env.BINANCE_API_SECRET
-})
+/* eslint-disable no-unused-vars */
+/* eslint one-var: ["error", "always"] */
+/* eslint-env es6 */
+const bot = require('../services/telegram'),
+  logger = require('../services/logger'),
+  { http } = require('../services/axios'),
+  { to } = require('await-to-js'),
+  Binance = require('binance-api-node').default,
+  commandParts = require('telegraf-command-parts'),
+  binance = Binance({
+    apiKey: process.env.BINANCE_API_KEY,
+    apiSecret: process.env.BINANCE_API_SECRET
+  }),
+  sellOrderOnBinance = async (coin) => {
+    await binance.order({
+      symbol: coin.market,
+      side: 'SELL',
+      quantity: parseFloat(coin.averageCalculator.totalAmount),
+      type: 'MARKET'
+    })
+  }
 
 bot.use(commandParts())
 
-bot.command('sell', async (ctx, next) => {
-  let coinToSell = ctx.state.command.args
+bot.command('sell', async (ctx) => {
+  let coinToSell = ctx.state.command.args,
+    coin
   logger.info('Pegando informações da moeda ' + coinToSell.toUpperCase())
-
-  let coin
 
   await http.get('api/dca/log')
     .then(r => {
@@ -32,33 +41,4 @@ bot.command('sell', async (ctx, next) => {
 
   ctx.reply('Foi enviada uma ordem de VENDA para a moeda ' + coin.currency + '!')
   await sellOrderOnBinance(coin)
-
-  // let reply = "*VENDA MANUAL*:\n"
-  // reply += "Just sold: " + coin.market + "\n"
-  // reply += "Sell strat: MANUAL"
-  // reply += "Cost: 0.05042140"
-  // reply += "Rate: 0.00252107"
-  // reply += "Profit: 1.10%"
-  // reply += "Profit ETH: 0.00054396"
 })
-
-const sellOrderOnBinance = async (coin) => {
-  await binance.order({
-    symbol: coin.market,
-    side: 'SELL',
-    quantity: parseFloat(coin.averageCalculator.totalAmount),
-    type: 'MARKET'
-  })
-}
-
-// const calculatePrice = (coin) => {
-//   return parseInt(coin.averageCalculator.totalAmount) * coin.currentPrice
-// }
-
-// const calculateProfitInPercent = async (coin) => {
-//   let orderDetail = await binance.allOrder({ symbol: coin.market })
-
-//   let calculo = ((valorVenda - valorCompra) / valorCompra) * 100
-// }
-
-// const calculateProfit = async (coin)
