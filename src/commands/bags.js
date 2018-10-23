@@ -42,6 +42,7 @@ bot.command('bags', (ctx) => {
       })
       // return reply
       reply += '```'
+      reply += '\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
 
       ctx.reply(reply, { parse_mode: 'markdown' })
 

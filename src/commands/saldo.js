@@ -93,7 +93,8 @@ bot.command('saldo', (ctx) => {
       reply += ' - ' + yesterdayProfitCount + ' trades\n'
       reply += ' - ' + yesterdayProfitFiat + ' USD\n'
       reply += ' - ' + yesterdayProfit + ' ETH\n'
-      reply += '*Meses*: ' + monthlyProfit + ' ' + responseConfig.data.market + ' (' + monthlyCount + ' trades)\n'
+      reply += '*Meses*: ' + monthlyProfit + ' ' + responseConfig.data.market + ' (' + monthlyCount + ' trades)'
+      reply += '\n\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
 
       ctx.reply(reply, { parse_mode: 'markdown' })
     }))
