@@ -2,50 +2,30 @@
 /* eslint-env es6 */
 const bot = require('../services/telegram'),
   logger = require('../services/logger'),
-  { http } = require('../services/axios')
+  axios = require('axios')
 
 bot.command('bags', (ctx) => {
   logger.info('Pegando informações DCAs')
-  http.get('api/dca/log')
-    .then(r => {
-      let dados,
-        ordered,
-        reply,
-        count
-
-      dados = r.data.map(item => {
-        let dado = item
-        dado.profit = item.profit
-        dado.currency = item.currency
-        dado.boughtTimes = item.boughtTimes
-        dado.percent = item.sellStrategies[0].currentValue
-        return dado
-      })
-
-      ordered = dados.slice(0)
+  const URL_DCA = 'http://bit.deyvisonrocha.com:3000/api/dca.json'
+  axios.get(URL_DCA)
+    .then(response => {
+      ordered = response.data.slice(0)
       ordered.sort((a, b) => {
         return b.profit - a.profit
       })
 
-      reply = '*Bags:* \n```\n'
-      count = 1
-
+      let reply = '*Bags:* \n```\n'
+      reply += 'Moeda | Profit % | Entradas \n'
+      reply += '----- | -------- | -------- \n'
       ordered.map(dado => {
-        reply += count + '. ' + dado.currency.padEnd(7)
-        if (dado.boughtTimes > 0) {
-          reply += ' (' + dado.boughtTimes + ') '
-        } else {
-          reply += '     '
-        }
-        reply += dado.percent.toFixed(2) + '%\n'
-        count++
+        let sellStrategy = JSON.parse(dado.sell_strategy)[0]
+        reply += dado.market.slice(0, -3).leftJustify(5, ' ') + ' | ' + sellStrategy.currentValue.toFixed(2).toString().leftJustify(8, ' ') + ' | ' + dado.bought_times.toString().leftJustify(8, ' ') + '\n'
       })
-      // return reply
+
       reply += '```'
       reply += '\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
 
       ctx.reply(reply, { parse_mode: 'markdown' })
-
       logger.info('comando /bags respondido.')
     })
     .catch(err => {
