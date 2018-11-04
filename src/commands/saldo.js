@@ -35,32 +35,17 @@ bot.command('saldo', (ctx) => {
     axios.get(URL_CONFIGURATION)
   ])
     .then(axios.spread((responseMonthly, responseDaily, responseTcv, responsePairs, responseConfig) => {
-      let now = new Date(),
-        monthlyFormat = now.getFullYear() + '-' + (now.getMonth() + 1),
-        dailyFormat = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
-        yesterdayFormat = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + (now.getDate() - 1)
+      currentDate = responseDaily.data.slice(-1)[0]
+      dailyPercent = currentDate
+      dailyProfit = currentDate
+      dailyProfitFiat = currentDate
+      dailyProfitCount = currentDate
 
-      responseMonthly.data.map(item => {
-        if (monthlyFormat === item.sold_month) {
-          monthlyCount = item.sell_count
-          monthlyProfit = item.profit.toFixed(2)
-        }
-      })
-
-      responseDaily.data.map(item => {
-        if (dailyFormat === item.sold_date) {
-          dailyPercent = item.profit_percent.toFixed(2)
-          dailyProfit = item.profit.toFixed(8)
-          dailyProfitFiat = item.profit_fiat
-          dailyProfitCount = item.sell_count
-        }
-        if (yesterdayFormat === item.sold_date) {
-          yesterdayPercent = item.profit_percent.toFixed(2)
-          yesterdayProfit = item.profit.toFixed(8)
-          yesterdayProfitFiat = item.profit_fiat
-          yesterdayProfitCount = item.sell_count
-        }
-      })
+      yesterdayData = responseDaily.data.slice(-2)[0]
+      yesterdayPercent = yesterdayData.profit_percent.toFixed(2)
+      yesterdayProfit = yesterdayData.profit.toFixed(8)
+      yesterdayProfitFiat = yesterdayData.profit_fiat
+      yesterdayProfitCount = yesterdayData.sell_count
 
       responseTcv.data.map(item => {
         if (item.key === 'realBalance') {
@@ -78,23 +63,25 @@ bot.command('saldo', (ctx) => {
         }
       })
 
-      reply = '*Saldo para Trade:*\n' + tcv + ' ' + responseConfig.data.market + '\n\n'
-      reply += '*Totais:*\n'
+      reply = '*Saldos:*\n```\nDisponível para Trade: ' + tcv + ' ' + responseConfig.data.market + '\n'
       reply += bnbAmount + ' BNB\n'
-      reply += totalAmount.toFixed(8) + ' ' + responseConfig.data.market + '\n\n'
-      reply += '*Resultados:*\n'
-      reply += '*Hoje*: \n'
-      reply += ' - ' + dailyPercent + '%\n'
-      reply += ' - ' + dailyProfitCount + ' trades\n'
-      reply += ' - ' + dailyProfitFiat + ' USD\n'
-      reply += ' - ' + dailyProfit + ' ETH\n'
-      reply += '*Ontem*: \n'
-      reply += ' - ' + yesterdayPercent + '%\n'
-      reply += ' - ' + yesterdayProfitCount + ' trades\n'
-      reply += ' - ' + yesterdayProfitFiat + ' USD\n'
-      reply += ' - ' + yesterdayProfit + ' ETH\n'
-      reply += '*Meses*: ' + monthlyProfit + ' ' + responseConfig.data.market + ' (' + monthlyCount + ' trades)'
-      reply += '\n\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
+      reply += totalAmount.toFixed(8) + ' ' + responseConfig.data.market + '```\n\n'
+      reply += '*Resultados dos últimos 7 dias:*\n```\n'
+      reply += 'Dia   | Ganho % | Ganho ' + responseConfig.data.market + '  | Ganho USD | Trades\n'
+      reply += '----- | ------- | ---------- | --------- | ------\n'
+      responseDaily.data.slice(-7).map(item => {
+        let dateStr = item.sold_date.split('-')
+        reply += dateStr[2] + '/' + dateStr[1] + ' | ' + item.profit_percent.toFixed(2).toString().leftJustify(7, ' ') + ' | ' + item.profit.toFixed(8) + ' |      ' + item.profit_fiat.toString().leftJustify(4, ' ') + ' | ' + item.sell_count.toString().leftJustify(6, ' ') + '\n'
+      })
+      reply += '```\n*Resultados dos últimos meses:*\n```\n'
+      reply += 'Mês     | Ganho ' + responseConfig.data.market + '  | Ganho USD | Trades\n'
+      reply += '------- | ---------- | --------- | ------\n'
+      responseMonthly.data.map(item => {
+        let dateStr = item.sold_month.split('-')
+        let valueProfit = item.profit * responseConfig.data.currencyPrice
+        reply += dateStr[1] + '/' + dateStr[0] + ' | ' + item.profit.toFixed(8) + ' | ' + valueProfit.toFixed(2).toString().leftJustify(9, ' ') + ' | '  + item.sell_count.toString().leftJustify(6, ' ') + '\n'
+      })
+      reply += '```\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
 
       ctx.reply(reply, { parse_mode: 'markdown' })
     }))
@@ -103,3 +90,19 @@ bot.command('saldo', (ctx) => {
       logger.error('Ops... Algo errado: ' + err)
     })
 })
+
+String.prototype.leftJustify = function( length, char ) {
+  var fill = []
+  while ( fill.length + this.length < length ) {
+    fill[fill.length] = char
+  }
+  return fill.join('') + this
+}
+
+String.prototype.rightJustify = function( length, char ) {
+  var fill = []
+  while ( fill.length + this.length < length ) {
+    fill[fill.length] = char
+  }
+  return this + fill.join('')
+}
