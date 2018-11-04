@@ -21,11 +21,11 @@ bot.command('saldo', (ctx) => {
     totalAmount = 0,
     reply
 
-  const URL_MONHTY = 'http://bit.deyvisonrocha.com:3000/api/monthly-sales.json',
-    URL_DAILY = 'http://bit.deyvisonrocha.com:3000/api/daily-sales.json',
-    URL_TCV = 'http://bit.deyvisonrocha.com:3000/api/tcv.json',
-    URL_PAIRS = 'http://bit.deyvisonrocha.com:3000/api/pairs.json',
-    URL_CONFIGURATION = 'http://bit.deyvisonrocha.com:3000/api/configuration.json'
+  const URL_MONHTY = process.env.PTTRACKER_HOST + 'monthly-sales.json',
+    URL_DAILY = process.env.PTTRACKER_HOST + 'daily-sales.json',
+    URL_TCV = process.env.PTTRACKER_HOST + 'tcv.json',
+    URL_PAIRS = process.env.PTTRACKER_HOST + 'pairs.json',
+    URL_CONFIGURATION = process.env.PTTRACKER_HOST + 'configuration.json'
 
   axios.all([
     axios.get(URL_MONHTY),
@@ -84,6 +84,7 @@ bot.command('saldo', (ctx) => {
       reply += '```\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
 
       ctx.reply(reply, { parse_mode: 'markdown' })
+      logger.info('comando /saldo respondido.')
     }))
     .catch(err => {
       ctx.reply('Ops... Algo errado. ' + err)

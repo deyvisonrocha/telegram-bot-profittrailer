@@ -6,7 +6,7 @@ const bot = require('../services/telegram'),
 
 bot.command('bags', (ctx) => {
   logger.info('Pegando informações DCAs')
-  const URL_DCA = 'http://bit.deyvisonrocha.com:3000/api/dca.json'
+  const URL_DCA = process.env.PTTRACKER_HOST + 'dca.json'
   axios.get(URL_DCA)
     .then(response => {
       ordered = response.data.slice(0)
