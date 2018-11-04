@@ -1,4 +1,3 @@
-
 const BNB_NAME = 'BNB'
 
 const propsBalance = [
