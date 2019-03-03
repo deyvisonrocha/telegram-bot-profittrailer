@@ -21,6 +21,7 @@ String.prototype.rightJustify = function( length, char ) {
 // Comandos
 require('./src/commands/saldo')
 require('./src/commands/bags')
+require('./src/commands/entradas')
 require('./src/commands/sell')
 
 bot.telegram.getMe()
