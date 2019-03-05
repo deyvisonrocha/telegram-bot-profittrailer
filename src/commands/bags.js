@@ -9,7 +9,7 @@ bot.command('bags', (ctx) => {
   const URL_DCA = process.env.PTTRACKER_HOST + 'dca.json'
   axios.get(URL_DCA)
     .then(response => {
-      ordered = response.data.slice(0)
+      let ordered = response.data
       ordered.sort((a, b) => {
         return b.profit - a.profit
       })
