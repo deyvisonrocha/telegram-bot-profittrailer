@@ -4,35 +4,72 @@ const bot = require('../services/telegram'),
   logger = require('../services/logger'),
   axios = require('axios')
 
+const avaliableStrategies = [
+  'SIGNAL',
+  'LOWBB',
+  'HIGHBB',
+  'GAIN',
+  'LOSS',
+  'SMAGAIN',
+  'EMAGAIN',
+  'HMAGAIN',
+  'DEMAGAIN',
+  'SMASPREAD',
+  'EMASPREAD',
+  'HMASPREAD',
+  'DEMASPREAD',
+  'SMACROSS',
+  'EMACROSS',
+  'HMACROSS',
+  'DEMACROSS',
+  'RSI',
+  'STOCH',
+  'STOCHRSI',
+  'STOCHRSID',
+  'STOCHRSIK',
+  'STOCHRSICROSS',
+  'MACD',
+  'BBWIDTH',
+  'OBV',
+  'PDHIGH',
+  'ANDERSON',
+  'DISABLED',
+]
+
+function checkAndAdd(arr, item) {
+  var found = arr.some(function (el) {
+    return el.name === item.name
+  })
+  if (!found) { arr.push({ name: item.name, entryValue: item.entryValue, entryValueLimit: item.entryValueLimit }) }
+}
+
 bot.command('entradas', (ctx) => {
   logger.info('Pegando informações Possible Buys')
   const URL_POSSIBLE_BUYS = process.env.PTTRACKER_HOST + 'possible-buys.json'
   axios.get(URL_POSSIBLE_BUYS)
     .then(response => {
       let ordered = response.data
+      let legenda = []
       ordered.sort((a, b) => {
-        return b.perc_change - a.perc_change
+        return a.perc_change - b.perc_change
       })
       let reply = '*Entradas:* \n```\n'
-      reply += '  Moeda | Estratégia (Entrada/Atual) \n'
+      reply += '  Moeda | Estratégias \n'
       reply += '------- | -------------------------- \n'
       ordered.map(dado => {
         let estrategias = JSON.parse(dado.buy_strategy)
         reply += dado.market.slice(0, -3).leftJustify(7, ' ') + ' | '
-        // reply += parseFloat((dado.perc_change * 100) * -1).toFixed(2).leftJustify(11, ' ') + ' | '
-        let count = 0
         estrategias.map(item => {
-          if (estrategias.length > 1) {
-            if (count > 0) {
-              reply += ' '
-            }
-            reply += item.name + ' ' + (item.positive === true ? '✔' : '❌')
-            count++
-          } else {
-            reply += item.name + ' ' + (item.positive === true ? '✔' : '❌')
+          if (avaliableStrategies.indexOf(item.name) > -1) {
+            checkAndAdd(legenda, item)
+            reply += item.currentValue.toFixed(2).toString() + ' ' + (item.positive === 'true' ? '✅' : '❌') + ' '
           }
         })
         reply += '\n'
+      })
+      reply += '\n'
+      legenda.map(dado => {
+        reply += `${dado.name}: ${dado.entryValue} (Limite: ${dado.entryValueLimit})\n`
       })
       reply += '```'
       reply += '\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
