@@ -2,7 +2,8 @@
 /* eslint-env es6 */
 const bot = require('../services/telegram'),
   logger = require('../services/logger'),
-  axios = require('axios')
+  axios = require('axios'),
+  { marketColumn, marketRows } = require('./../functions/utils')
 
 bot.command('bags', (ctx) => {
   logger.info('Pegando informações DCAs')
@@ -15,11 +16,10 @@ bot.command('bags', (ctx) => {
       })
 
       let reply = '*Bags:* \n```\n'
-      reply += 'Moeda | Profit % | Entradas \n'
-      reply += '----- | -------- | -------- \n'
+      reply += marketColumn() + ' | Profit % | Entradas \n'
+      reply += '------- | -------- | -------- \n'
       ordered.map(dado => {
-        let sellStrategy = JSON.parse(dado.sell_strategy)[0]
-        reply += dado.market.slice(0, -3).leftJustify(5, ' ') + ' | ' + sellStrategy.currentValue.toFixed(2).toString().leftJustify(8, ' ') + ' | ' + dado.bought_times.toString().leftJustify(8, ' ') + '\n'
+        reply += marketRows(dado.market) + dado.profit.toFixed(2).toString().leftJustify(8, ' ') + ' | ' + dado.bought_times.toString().leftJustify(8, ' ') + '\n'
       })
 
       reply += '```'
