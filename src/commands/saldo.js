@@ -35,13 +35,14 @@ bot.command('saldo', (ctx) => {
     axios.get(URL_CONFIGURATION)
   ])
     .then(axios.spread((responseMonthly, responseDaily, responseTcv, responsePairs, responseConfig) => {
-      currentDate = responseDaily.data.slice(-1)[0]
+      let bnbAmount = 0
+      let currentDate = responseDaily.data
       dailyPercent = currentDate
       dailyProfit = currentDate
       dailyProfitFiat = currentDate
       dailyProfitCount = currentDate
 
-      yesterdayData = responseDaily.data.slice(-2)[0]
+      let yesterdayData = responseDaily.data.slice(-2)[0]
       yesterdayPercent = yesterdayData.profit_percent.toFixed(2)
       yesterdayProfit = yesterdayData.profit.toFixed(8)
       yesterdayProfitFiat = yesterdayData.profit_fiat
@@ -58,7 +59,7 @@ bot.command('saldo', (ctx) => {
       })
 
       responsePairs.data.map(item => {
-        if (item.market === 'BNBETH') {
+        if (item.market.includes('BNB')) {
           bnbAmount = item.total_amount.toFixed(8)
         }
       })
