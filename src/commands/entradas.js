@@ -2,7 +2,8 @@
 /* eslint-env es6 */
 const bot = require('../services/telegram'),
   logger = require('../services/logger'),
-  axios = require('axios')
+  axios = require('axios'),
+  { marketColumn, marketRows } = require('./../functions/utils')
 
 const avaliableStrategies = [
   'SIGNAL',
@@ -54,11 +55,11 @@ bot.command('entradas', (ctx) => {
         return a.perc_change - b.perc_change
       })
       let reply = '*Entradas:* \n```\n'
-      reply += '  Moeda | Estratégias \n'
+      reply += marketColumn() + ' | Estratégias \n'
       reply += '------- | -------------------------- \n'
       ordered.map(dado => {
         let estrategias = JSON.parse(dado.buy_strategy)
-        reply += dado.market.slice(0, -3).leftJustify(7, ' ') + ' | '
+        reply += marketRows(dado.market)
         estrategias.map(item => {
           if (avaliableStrategies.indexOf(item.name) > -1) {
             checkAndAdd(legenda, item)
