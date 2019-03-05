@@ -68,19 +68,19 @@ bot.command('saldo', (ctx) => {
       reply += bnbAmount + ' BNB\n'
       reply += totalAmount.toFixed(8) + ' ' + responseConfig.data.market + '```\n\n'
       reply += '*Resultados dos últimos 7 dias:*\n```\n'
-      reply += 'Dia   | Ganho % | Ganho ' + responseConfig.data.market + '  | Ganho USD | Trades\n'
-      reply += '----- | ------- | ---------- | --------- | ------\n'
+      reply += 'Dia   | Ganho % | Ganho ' + responseConfig.data.market + '\n'
+      reply += '----- | ------- | ---------- \n'
       responseDaily.data.slice(-7).map(item => {
         let dateStr = item.sold_date.split('-')
-        reply += dateStr[2] + '/' + dateStr[1] + ' | ' + item.profit_percent.toFixed(2).toString().leftJustify(7, ' ') + ' | ' + item.profit.toFixed(8) + ' |      ' + item.profit_fiat.toString().leftJustify(4, ' ') + ' | ' + item.sell_count.toString().leftJustify(6, ' ') + '\n'
+        reply += dateStr[2] + '/' + dateStr[1] + ' | ' + item.profit_percent.toFixed(2).toString().leftJustify(7, ' ') + ' | ' + item.profit.toFixed(8) + '\n'
       })
       reply += '```\n*Resultados dos últimos meses:*\n```\n'
-      reply += 'Mês     | Ganho ' + responseConfig.data.market + '  | Ganho USD | Trades\n'
-      reply += '------- | ---------- | --------- | ------\n'
+      reply += 'Mês     | Ganho ' + responseConfig.data.market + '\n'
+      reply += '------- | ---------- \n'
       responseMonthly.data.map(item => {
         let dateStr = item.sold_month.split('-')
         let valueProfit = item.profit * responseConfig.data.currencyPrice
-        reply += dateStr[1] + '/' + dateStr[0] + ' | ' + item.profit.toFixed(8) + ' | ' + valueProfit.toFixed(2).toString().leftJustify(9, ' ') + ' | '  + item.sell_count.toString().leftJustify(6, ' ') + '\n'
+        reply += dateStr[1] + '/' + dateStr[0] + ' | ' + item.profit.toFixed(8) + '\n'
       })
       reply += '```\n[Acessar o ProfitTrailer](' + process.env.PT_HOST + ')'
 
