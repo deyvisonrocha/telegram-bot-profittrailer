@@ -56,7 +56,7 @@ bot.command('entradas', (ctx) => {
       })
       let reply = '*Entradas:* \n```\n'
       reply += marketColumn() + ' | Estratégias \n'
-      reply += '------- | -------------------------- \n'
+      reply += '------- | ----------------------- \n'
       ordered.map(dado => {
         let estrategias = JSON.parse(dado.buy_strategy)
         reply += marketRows(dado.market)
