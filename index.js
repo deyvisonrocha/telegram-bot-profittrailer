@@ -2,27 +2,17 @@ require('dotenv').config()
 const logger = require('./src/services/logger')
 const bot = require('./src/services/telegram')
 
-String.prototype.leftJustify = function( length, char ) {
-  var fill = []
-  while ( fill.length + this.length < length ) {
-    fill[fill.length] = char
-  }
-  return fill.join('') + this
-}
-
-String.prototype.rightJustify = function( length, char ) {
-  var fill = []
-  while ( fill.length + this.length < length ) {
-    fill[fill.length] = char
-  }
-  return this + fill.join('')
-}
+// Prototypes
+require('./src/functions/prototypes')
 
 // Comandos
 require('./src/commands/saldo')
 require('./src/commands/bags')
 require('./src/commands/entradas')
 require('./src/commands/sell')
+
+require('./src/commands/configs/list')
+require('./src/commands/configs/switch')
 
 bot.telegram.getMe()
   .then((botInfo) => {
