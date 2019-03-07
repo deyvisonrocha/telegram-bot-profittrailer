@@ -1,5 +1,4 @@
 const Telegraf = require('telegraf')
-const telegramConfig = require('../config/telegram')
-const telegram = new Telegraf(telegramConfig.key)
+const telegram = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 
 module.exports = telegram
