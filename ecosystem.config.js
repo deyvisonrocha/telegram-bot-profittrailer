@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'ptrocha-bot',
+    name: 'profittrailer-bot',
     script: 'babel-node index.js',
     env: {
       NODE_ENV: 'development'
