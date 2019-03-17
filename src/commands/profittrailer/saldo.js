@@ -1,7 +1,7 @@
 /* eslint one-var: ["error", "always"] */
 /* eslint-env es6 */
-const bot = require('../services/telegram'),
-  logger = require('../services/logger'),
+const bot = require('../../services/telegram'),
+  logger = require('../../services/logger'),
   axios = require('axios')
 
 bot.command('saldo', (ctx) => {

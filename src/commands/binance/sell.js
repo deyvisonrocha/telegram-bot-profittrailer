@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint one-var: ["error", "always"] */
 /* eslint-env es6 */
-const bot = require('../services/telegram'),
-  logger = require('../services/logger'),
-  { http } = require('../services/axios'),
+const bot = require('../../services/telegram'),
+  logger = require('../../services/logger'),
+  { http } = require('../../services/axios'),
   { to } = require('await-to-js'),
   Binance = require('binance-api-node').default,
   commandParts = require('telegraf-command-parts'),
@@ -23,6 +23,11 @@ const bot = require('../services/telegram'),
 bot.use(commandParts())
 
 bot.command('sell', async (ctx) => {
+  if (ctx.message.from.id.toString() !== process.env.TELEGRAM_ADMIN_ID) {
+    ctx.reply('Comando não encontrado.')
+    return
+  }
+
   let coinToSell = ctx.state.command.args,
     coin
   logger.info('Pegando informações da moeda ' + coinToSell.toUpperCase())

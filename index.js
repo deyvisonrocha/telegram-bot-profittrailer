@@ -6,13 +6,15 @@ const bot = require('./src/services/telegram')
 require('./src/functions/prototypes')
 
 // Comandos
-require('./src/commands/saldo')
-require('./src/commands/bags')
-require('./src/commands/entradas')
-require('./src/commands/sell')
+require('./src/commands/profittrailer/saldo')
+require('./src/commands/profittrailer/bags')
+require('./src/commands/profittrailer/entradas')
+require('./src/commands/binance/sell')
 
 require('./src/commands/configs/list')
 require('./src/commands/configs/switch')
+
+require('./src/commands/calculadora')
 
 bot.telegram.getMe()
   .then((botInfo) => {

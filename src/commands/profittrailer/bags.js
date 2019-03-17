@@ -1,9 +1,9 @@
 /* eslint one-var: ["error", "always"] */
 /* eslint-env es6 */
-const bot = require('../services/telegram'),
-  logger = require('../services/logger'),
+const bot = require('../../services/telegram'),
+  logger = require('../../services/logger'),
   axios = require('axios'),
-  { marketColumn, marketRows } = require('./../functions/utils')
+  { marketColumn, marketRows } = require('../../functions/utils')
 
 bot.command('bags', (ctx) => {
   logger.info('Pegando informações DCAs')
