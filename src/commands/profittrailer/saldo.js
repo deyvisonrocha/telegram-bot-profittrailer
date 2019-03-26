@@ -64,9 +64,9 @@ bot.command('saldo', (ctx) => {
         }
       })
 
-      reply = '*Saldos:*\n```\nDisponível para Trade: ' + tcv + ' ' + responseConfig.data.market + '\n'
-      reply += bnbAmount + ' BNB\n'
-      reply += totalAmount.toFixed(8) + ' ' + responseConfig.data.market + '```\n\n'
+      reply = '*Saldos:*\n```\nDisponível para Trade: \n - ' + tcv + ' ' + responseConfig.data.market + '\n'
+      reply += 'Saldo BNB: \n - ' + bnbAmount + ' BNB\n'
+      reply += 'Saldo Total: \n - ' + totalAmount.toFixed(8) + ' ' + responseConfig.data.market + '```\n\n'
       reply += '*Resultados dos últimos 7 dias:*\n```\n'
       reply += 'Dia   | Ganho % | Ganho ' + responseConfig.data.market + '\n'
       reply += '----- | ------- | ---------- \n'
